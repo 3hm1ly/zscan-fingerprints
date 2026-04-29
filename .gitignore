@@ -1,0 +1,9 @@
+# intermediate / output artifacts produced by workflows
+*.json
+*.yaml
+!.github/**/*.yaml
+*.tar.gz
+*.sha256
+spray_*
+__pycache__/
+*.pyc
