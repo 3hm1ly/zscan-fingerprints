@@ -13,6 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # need full history so we can push back
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -20,61 +24,55 @@ jobs:
           python-version: '3.11'
 
       - name: Install deps
-        run: |
-          python -m pip install --upgrade pip
-          pip install pyyaml
+        run: pip install pyyaml
 
       - name: Pull FingerprintHub upstream
         run: |
           curl -fSL --retry 3 --retry-delay 5 \
             -o web_fingerprint_v4.json \
             https://raw.githubusercontent.com/0x727/FingerprintHub/main/web_fingerprint_v4.json
-          ls -la web_fingerprint_v4.json
           echo "size: $(wc -c < web_fingerprint_v4.json) bytes"
 
       - name: Convert → fingers YAML
         run: |
-          python scripts/fph_to_fingers.py web_fingerprint_v4.json finger_hub_overlay.yaml
-          ls -la finger_hub_overlay.yaml
+          mkdir -p artifacts
+          python scripts/fph_to_fingers.py web_fingerprint_v4.json artifacts/finger_hub_overlay.yaml
+          # also write a metadata stamp so CDN consumers can sanity-check freshness
+          cat > artifacts/finger_hub_overlay.meta.json <<EOF
+          {
+            "synced_at": "$(date -u +'%Y-%m-%dT%H:%M:%SZ')",
+            "upstream_commit": "$(curl -sSL https://api.github.com/repos/0x727/FingerprintHub/commits/main | jq -r .sha)",
+            "yaml_sha256": "$(sha256sum artifacts/finger_hub_overlay.yaml | cut -d' ' -f1)",
+            "yaml_size": $(wc -c < artifacts/finger_hub_overlay.yaml)
+          }
+          EOF
+          cat artifacts/finger_hub_overlay.meta.json
 
-      - name: Bundle
+      - name: Commit + push to main (so JSDelivr can serve it)
         run: |
-          tar czf finger_hub_overlay.tar.gz finger_hub_overlay.yaml
-          sha256sum finger_hub_overlay.yaml finger_hub_overlay.tar.gz > checksums.sha256
-          cat checksums.sha256
+          git config user.email "actions@github.com"
+          git config user.name  "github-actions[bot]"
+          git add artifacts/finger_hub_overlay.yaml artifacts/finger_hub_overlay.meta.json
+          if git diff --cached --quiet; then
+            echo "no changes (FingerprintHub upstream identical to last sync)"
+            exit 0
+          fi
+          git commit -m "chore(sync): refresh FingerprintHub overlay $(date -u +'%Y-%m-%d') [skip ci]"
+          git push origin main
 
-      - name: Resolve dated tag
-        id: tag
+      - name: Also publish dated release (for direct gh release download)
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           tag="fp-$(date -u +'%Y%m%d')"
-          echo "tag=$tag" >> "$GITHUB_OUTPUT"
-          echo "tag = $tag"
-
-      - name: Publish dated release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          # If we ran twice the same day, recreate so the artifacts match
-          gh release delete "${{ steps.tag.outputs.tag }}" --repo "${{ github.repository }}" --yes 2>/dev/null || true
+          gh release delete "$tag" --repo "${{ github.repository }}" --yes 2>/dev/null || true
           sleep 2
-          gh release create "${{ steps.tag.outputs.tag }}" \
-            finger_hub_overlay.yaml \
+          tar czf finger_hub_overlay.tar.gz -C artifacts finger_hub_overlay.yaml finger_hub_overlay.meta.json
+          gh release create "$tag" \
+            artifacts/finger_hub_overlay.yaml \
+            artifacts/finger_hub_overlay.meta.json \
             finger_hub_overlay.tar.gz \
-            checksums.sha256 \
             --repo "${{ github.repository }}" \
-            --title "FingerprintHub overlay ${{ steps.tag.outputs.tag }}" \
-            --notes "Auto-synced from [0x727/FingerprintHub](https://github.com/0x727/FingerprintHub) at $(date -u). Source JSON size $(wc -c < web_fingerprint_v4.json) bytes; YAML size $(wc -c < finger_hub_overlay.yaml) bytes."
-
-      - name: Re-tag as 'fp-latest' for stable JSDelivr URL
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release delete fp-latest --repo "${{ github.repository }}" --yes 2>/dev/null || true
-          sleep 2
-          gh release create fp-latest \
-            finger_hub_overlay.yaml \
-            finger_hub_overlay.tar.gz \
-            checksums.sha256 \
-            --repo "${{ github.repository }}" \
-            --title "FingerprintHub overlay — latest (pinned to ${{ steps.tag.outputs.tag }})" \
-            --notes "Floating tag pointing at the most-recent FingerprintHub overlay. Stable URL: https://cdn.jsdelivr.net/gh/${{ github.repository }}@fp-latest/finger_hub_overlay.yaml"
+            --title "FingerprintHub overlay $tag" \
+            --notes "Synced from 0x727/FingerprintHub. JSDelivr CDN URL: https://cdn.jsdelivr.net/gh/${{ github.repository }}@main/artifacts/finger_hub_overlay.yaml"

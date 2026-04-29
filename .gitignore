@@ -1,9 +1,9 @@
-# intermediate / output artifacts produced by workflows
-*.json
-*.yaml
-!.github/**/*.yaml
+# intermediate files (workflows produce them in CWD then commit only artifacts/)
+web_fingerprint_v4.json
 *.tar.gz
-*.sha256
-spray_*
 __pycache__/
 *.pyc
+
+# DO commit artifacts/ — that's the JSDelivr-served payload
+!artifacts/
+!artifacts/**

@@ -6,87 +6,86 @@ on:
   workflow_dispatch: {}
 
 permissions:
-  contents: write              # required to publish releases
+  contents: write
 
 jobs:
   mirror:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Resolve upstream latest tag
         id: up
         run: |
           tag=$(curl -sSL https://api.github.com/repos/chainreactors/spray/releases/latest | jq -r .tag_name)
-          if [ -z "$tag" ] || [ "$tag" = "null" ]; then
-            echo "failed to resolve upstream tag"
-            exit 1
-          fi
+          if [ -z "$tag" ] || [ "$tag" = "null" ]; then exit 1; fi
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
           echo "upstream tag = $tag"
 
-      - name: Check if already mirrored
-        id: check
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Read currently-mirrored tag
+        id: cur
         run: |
-          if gh release view "${{ steps.up.outputs.tag }}" --repo "${{ github.repository }}" >/dev/null 2>&1; then
-            echo "already mirrored"
+          if [ -f artifacts/spray.version ]; then
+            cur=$(cat artifacts/spray.version | tr -d '[:space:]')
+          else
+            cur="none"
+          fi
+          echo "tag=$cur" >> "$GITHUB_OUTPUT"
+          echo "currently mirrored = $cur"
+
+      - name: Skip if up to date
+        id: gate
+        run: |
+          if [ "${{ steps.up.outputs.tag }}" = "${{ steps.cur.outputs.tag }}" ]; then
             echo "needs_mirror=false" >> "$GITHUB_OUTPUT"
+            echo "already up to date"
           else
             echo "needs_mirror=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Download upstream assets
-        if: steps.check.outputs.needs_mirror == 'true'
+      - name: Download upstream binaries
+        if: steps.gate.outputs.needs_mirror == 'true'
         env:
           TAG: ${{ steps.up.outputs.tag }}
         run: |
-          # Pull all linux + checksums; macOS / windows builds are skipped
-          # to keep our mirror release smaller, but you can extend this.
+          mkdir -p artifacts
+          # Linux only — that's all our worker fleet needs.  amd64 first
+          # (most likely consumer), arm64 + 386 best-effort.
           for asset in spray_linux_amd64 spray_linux_arm64 spray_linux_386 spray_checksums.txt; do
             url="https://github.com/chainreactors/spray/releases/download/${TAG}/${asset}"
-            echo ">>> downloading $url"
-            curl -fSL --retry 3 --retry-delay 5 -o "$asset" "$url" || echo "skip $asset"
+            curl -fSL --retry 3 --retry-delay 5 -o "artifacts/${asset}" "$url" || \
+              echo "skip ${asset}"
           done
-          ls -la
+          echo "$TAG" > artifacts/spray.version
+          ls -la artifacts/
 
-      - name: Publish mirror release
-        if: steps.check.outputs.needs_mirror == 'true'
+      - name: Commit + push to main (JSDelivr-serveable path)
+        if: steps.gate.outputs.needs_mirror == 'true'
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name  "github-actions[bot]"
+          git add artifacts/spray_linux_* artifacts/spray_checksums.txt artifacts/spray.version
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "chore(sync): mirror spray ${{ steps.up.outputs.tag }} [skip ci]"
+          # Push with retries — pushing 9MB binaries occasionally hiccups
+          for i in 1 2 3; do git push origin main && break || sleep 5; done
+
+      - name: Also create gh release (for direct download fallback)
+        if: steps.gate.outputs.needs_mirror == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.up.outputs.tag }}
         run: |
+          gh release delete "$TAG" --repo "${{ github.repository }}" --yes 2>/dev/null || true
+          sleep 2
           gh release create "$TAG" \
-            spray_linux_amd64 \
-            spray_linux_arm64 \
-            spray_linux_386 \
-            spray_checksums.txt \
+            artifacts/spray_linux_amd64 \
+            artifacts/spray_linux_arm64 \
+            artifacts/spray_linux_386 \
+            artifacts/spray_checksums.txt \
             --repo "${{ github.repository }}" \
             --title "spray $TAG (mirrored)" \
-            --notes "Mirror of [chainreactors/spray $TAG](https://github.com/chainreactors/spray/releases/tag/$TAG). Republished here for downstream zscan workers in restricted networks."
-
-      - name: Re-tag as 'spray-latest' for stable JSDelivr URL
-        if: steps.check.outputs.needs_mirror == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: ${{ steps.up.outputs.tag }}
-        run: |
-          # Move the floating 'spray-latest' tag to the new release so
-          # consumers can hit a stable JSDelivr URL:
-          #   https://cdn.jsdelivr.net/gh/${{ github.repository }}@spray-latest/spray_linux_amd64
-          # (delete + recreate; gh release edit can't change tag)
-          gh release delete spray-latest --repo "${{ github.repository }}" --yes 2>/dev/null || true
-          # Wait for tag deletion to propagate
-          sleep 3
-          gh release create spray-latest \
-            spray_linux_amd64 \
-            spray_linux_arm64 \
-            spray_linux_386 \
-            spray_checksums.txt \
-            --repo "${{ github.repository }}" \
-            --title "spray latest mirror — pinned to $TAG" \
-            --notes "Floating tag pointing at the most-recent mirrored upstream. JSDelivr-friendly URL." \
-            --target main || gh release create spray-latest \
-              spray_linux_amd64 spray_linux_arm64 spray_linux_386 spray_checksums.txt \
-              --repo "${{ github.repository }}" \
-              --title "spray latest mirror — pinned to $TAG" \
-              --notes "Floating tag pointing at the most-recent mirrored upstream. JSDelivr-friendly URL."
+            --notes "Mirror of [chainreactors/spray $TAG](https://github.com/chainreactors/spray/releases/tag/$TAG). Primary consumer URL via JSDelivr: https://cdn.jsdelivr.net/gh/${{ github.repository }}@main/artifacts/spray_linux_amd64"
