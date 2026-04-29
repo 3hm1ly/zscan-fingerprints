@@ -70,8 +70,14 @@ jobs:
           git add artifacts/spray_linux_* artifacts/spray_checksums.txt artifacts/spray.version
           if git diff --cached --quiet; then exit 0; fi
           git commit -m "chore(sync): mirror spray ${{ steps.up.outputs.tag }} [skip ci]"
-          # Push with retries — pushing 9MB binaries occasionally hiccups
-          for i in 1 2 3; do git push origin main && break || sleep 5; done
+          # Retry with rebase — sister workflow may have pushed in parallel,
+          # 9MB binaries occasionally hiccup mid-push too.
+          for i in 1 2 3 4 5; do
+            git push origin main && break
+            echo "push rejected (attempt $i), pulling + rebasing..."
+            git pull --rebase origin main
+            sleep $((i * 2))
+          done
 
       - name: Also create gh release (for direct download fallback)
         if: steps.gate.outputs.needs_mirror == 'true'

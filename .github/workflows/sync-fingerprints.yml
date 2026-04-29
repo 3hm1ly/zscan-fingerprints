@@ -58,7 +58,13 @@ jobs:
             exit 0
           fi
           git commit -m "chore(sync): refresh FingerprintHub overlay $(date -u +'%Y-%m-%d') [skip ci]"
-          git push origin main
+          # Retry with rebase — sister workflow may have pushed in parallel
+          for i in 1 2 3 4 5; do
+            git push origin main && break
+            echo "push rejected (attempt $i), pulling + rebasing..."
+            git pull --rebase origin main
+            sleep $((i * 2))
+          done
 
       - name: Also publish dated release (for direct gh release download)
         if: success()
