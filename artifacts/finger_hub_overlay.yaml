@@ -2015,6 +2015,19 @@
       - (?mi)<title[^>]*>apc.*?</title>
   vendor: schneider-electric
   product: apc-network-management-card
+- name: ape-volo-admin
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - ape\-volo\-admin
+      - ape\-volo\-admin"\ http\.html:"中后台管理权限框架
+      - 中后台管理权限框架
+  vendor: xianhc
+  product: ape-volo-admin
 - name: apeosport-v_c3375
   protocol: http
   default_port:
@@ -3268,6 +3281,17 @@
       - (?i)background:\ no\-repeat\ url\(\.\./images/login/pdmdenglu1_28\.png\);
   vendor: 00_unknown
   product: betasoft-pdm-data-acquisition
+- name: better-search
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - /wp\-content/plugins/better\-search/
+  vendor: webberzone
+  product: better-search
 - name: beyeon-iot
   protocol: http
   default_port:
@@ -6103,6 +6127,17 @@
       body:
       - (?mi)<title[^>]*>comfyui.*?</title>
   vendor: comfy-org
+  product: comfyui-manager
+- name: comfyui-manager
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - (?mi)<title[^>]*>comfyui.*?</title>
+  vendor: comfy
   product: comfyui-manager
 - name: commerce
   protocol: http
@@ -9082,6 +9117,17 @@
       - (?i)target="_blank"\ title="affiliate
   vendor: 00_unknown
   product: elitius
+- name: email_security_gateway
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - barracuda
+  vendor: barracuda
+  product: email_security_gateway
 - name: embedthis-appweb
   protocol: http
   default_port:
@@ -9698,6 +9744,17 @@
       - (?i)/wp\-content/plugins/eventin
   vendor: themewinter
   product: eventin
+- name: eventprime-event-calendar-management
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - eventprime\-event\-calendar\-management
+  vendor: eventprime
+  product: eventprime-event-calendar-management
 - name: eventum
   protocol: http
   default_port:
@@ -15941,6 +15998,17 @@
       - '-109972155'
   vendor: journyx
   product: journyx-jtime
+- name: jpom
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - (?mi)<title[^>]*>jpom.*?</title>
+  vendor: dromara
+  product: jpom
 - name: jquery-bbq
   protocol: http
   default_port:
@@ -17178,6 +17246,17 @@
       - (?i)<title>langchain\ chat</title>
   vendor: langchain
   product: langchain
+- name: langchain-chatchat
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - (?mi)<title[^>]*>langchain-chatchat api server.*?</title>
+  vendor: chatchat-space
+  product: langchain-chatchat
 - name: langflow
   protocol: http
   default_port:
@@ -18225,6 +18304,28 @@
       - (?i)server:\ machttp
   vendor: 00_unknown
   product: machttp
+- name: madong-admin-saas
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - favicon:
+      mmh3:
+      - '1349700189'
+  vendor: madong-code
+  product: madong-admin-saas
+- name: mage-eventpress
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - /wp\-content/plugins/mage\-eventpress/
+  vendor: magepeopleteam
+  product: mage-eventpress
 - name: magicmail
   protocol: http
   default_port:
@@ -22720,6 +22821,17 @@
       - (?i)this\ software\ is\ based\ on\ the\ opennewsletter\ project
   vendor: 00_unknown
   product: opennewsletter
+- name: openpanel
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - (?mi)<title[^>]*>bull dashboard.*?</title>
+  vendor: openpanel
+  product: openpanel
 - name: openrefine
   protocol: http
   default_port:
@@ -25944,6 +26056,17 @@
       mmh3:
       - 51c2a7a38f5eb8b2c5577375a2633827
   vendor: rancher
+  product: rancher
+- name: rancher
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - (?mi)<title[^>]*>rancher.*?</title>
+  vendor: suse
   product: rancher
 - name: ranger
   protocol: http
@@ -32009,6 +32132,17 @@
       - (?i)usr/themes
   vendor: 00_unknown
   product: typecho
+- name: typemill
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - typemill
+  vendor: typemill
+  product: typemill
 - name: u-mail
   protocol: http
   default_port:
@@ -34330,6 +34464,17 @@
       - (?i)/utility/corescripts/widget\.js
   vendor: 00_unknown
   product: weisha-learningsystem
+- name: welcart_e-commerce
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - wp\-content/plugins/usc\-e\-shop
+  vendor: welcart
+  product: welcart_e-commerce
 - name: wellcare-health-management-system
   protocol: http
   default_port:
@@ -37096,6 +37241,17 @@
       - (?i)help/zuitu\.php
   vendor: 00_unknown
   product: zuitu
+- name: zulip_server
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - zulip
+  vendor: zulip
+  product: zulip_server
 - name: zxoa
   protocol: http
   default_port:
