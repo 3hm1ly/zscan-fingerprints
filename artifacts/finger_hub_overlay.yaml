@@ -1409,6 +1409,17 @@
       - (?i)<modelname>ami\ megarac\ spx</modelname>
   vendor: 00_unknown
   product: ami-megarac-spx
+- name: amoro
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - (?mi)<title[^>]*>apache amoro.*?</title>
+  vendor: apache
+  product: amoro
 - name: analytics
   protocol: http
   default_port:
@@ -2546,8 +2557,8 @@
   rule:
   - regexps:
       body:
-      - (?mi)<title[^>]*>astrbot.*?</title>
-  vendor: astrbotdevs
+      - (?i)<title>astrbot
+  vendor: soulter
   product: astrbot
 - name: astrbot
   protocol: http
@@ -2557,8 +2568,8 @@
   rule:
   - regexps:
       body:
-      - (?i)<title>astrbot
-  vendor: soulter
+      - (?mi)<title[^>]*>astrbot.*?</title>
+  vendor: astrbotdevs
   product: astrbot
 - name: astro
   protocol: http
@@ -4814,6 +4825,17 @@
       - (?mi)<title[^>]*>chatgpt个人专用版.*?</title>
   vendor: chanzhaoyu
   product: chatgpt_web
+- name: chatwiki
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - (?mi)<title[^>]*>chatwiki.*?</title>
+  vendor: zhimaai
+  product: chatwiki
 - name: check-point-vpn
   protocol: http
   default_port:
@@ -5818,7 +5840,7 @@
   - regexps:
       body:
       - (?mi)<title[^>]*>cobbler web interface.*?</title>
-  vendor: cobblerd
+  vendor: cobbler_project
   product: cobbler
 - name: cobbler
   protocol: http
@@ -5829,7 +5851,7 @@
   - regexps:
       body:
       - (?mi)<title[^>]*>cobbler web interface.*?</title>
-  vendor: cobbler_project
+  vendor: cobblerd
   product: cobbler
 - name: cobranca
   protocol: http
@@ -5850,8 +5872,11 @@
   rule:
   - regexps:
       body:
-      - (?mi)<title[^>]*>cockpit.*?</title>
-  vendor: cockpit-project
+      - (?i)cockpit
+    favicon:
+      mmh3:
+      - '688609340'
+  vendor: agentejo
   product: cockpit
 - name: cockpit
   protocol: http
@@ -5872,9 +5897,8 @@
   rule:
   - regexps:
       body:
-      - (?i)cockpit/static/login\.css
-      - (?i)cockpit/static/login\.js
-  vendor: 00_unknown
+      - (?mi)<title[^>]*>cockpit.*?</title>
+  vendor: cockpit-project
   product: cockpit
 - name: cockpit
   protocol: http
@@ -5884,11 +5908,9 @@
   rule:
   - regexps:
       body:
-      - (?i)cockpit
-    favicon:
-      mmh3:
-      - '688609340'
-  vendor: agentejo
+      - (?i)cockpit/static/login\.css
+      - (?i)cockpit/static/login\.js
+  vendor: 00_unknown
   product: cockpit
 - name: code-server
   protocol: http
@@ -6126,7 +6148,7 @@
   - regexps:
       body:
       - (?mi)<title[^>]*>comfyui.*?</title>
-  vendor: comfy-org
+  vendor: comfy
   product: comfyui-manager
 - name: comfyui-manager
   protocol: http
@@ -6137,7 +6159,7 @@
   - regexps:
       body:
       - (?mi)<title[^>]*>comfyui.*?</title>
-  vendor: comfy
+  vendor: comfy-org
   product: comfyui-manager
 - name: commerce
   protocol: http
@@ -6267,13 +6289,10 @@
   - 80
   - 443
   rule:
-  - regexps:
-      body:
-      - (?i)location:\ /login\.action\?os_destination=
-      - '(?i)x\-confluence\-request\-time:'
-      - (?i)id="com\-atlassian\-confluence
-      - (?i)name="confluence\-base\-url"
-  vendor: 00_unknown
+  - favicon:
+      mmh3:
+      - '-305179312'
+  vendor: atlassian
   product: confluence
 - name: confluence
   protocol: http
@@ -6281,10 +6300,13 @@
   - 80
   - 443
   rule:
-  - favicon:
-      mmh3:
-      - '-305179312'
-  vendor: atlassian
+  - regexps:
+      body:
+      - (?i)location:\ /login\.action\?os_destination=
+      - '(?i)x\-confluence\-request\-time:'
+      - (?i)id="com\-atlassian\-confluence
+      - (?i)name="confluence\-base\-url"
+  vendor: 00_unknown
   product: confluence
 - name: conftool
   protocol: http
@@ -6918,6 +6940,17 @@
   - regexps:
       body:
       - (?mi)<title[^>]*>dagu.*?</title>
+  vendor: dagucloud
+  product: dagu
+- name: dagu
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - (?mi)<title[^>]*>dagu.*?</title>
   vendor: dagu-org
   product: dagu
 - name: dahua-wpms
@@ -7084,6 +7117,17 @@
   - regexps:
       body:
       - (?i)dataease
+  vendor: dataease
+  product: dataease
+- name: dataease
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - (?i)dataease
   vendor: dataease_project
   product: dataease
 - name: dataease
@@ -7096,17 +7140,6 @@
       body:
       - (?i)dataease
   vendor: fit2cloud
-  product: dataease
-- name: dataease
-  protocol: http
-  default_port:
-  - 80
-  - 443
-  rule:
-  - regexps:
-      body:
-      - (?i)dataease
-  vendor: dataease
   product: dataease
 - name: datagerry
   protocol: http
@@ -8046,6 +8079,17 @@
       - (?mi)<title[^>]*>identity management.*?</title>
   vendor: dogtagpki
   product: dogtagpki
+- name: dokan-lite
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - wp\-content/plugins/dokan\-lite/
+  vendor: wedevs
+  product: dokan-lite
 - name: dokmee ecm
   protocol: http
   default_port:
@@ -8548,6 +8592,18 @@
       - (?i)document\.writeln\("（温馨提示：此处为志高美萍分支机构联系方式，志高美萍总部联系方式请点击<a\ href='javascript:var
   vendor: 00_unknown
   product: e-link
+- name: e-office
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - eoffice
+      - weaver
+  vendor: weaver
+  product: e-office
 - name: e-plugger-srm
   protocol: http
   default_port:
@@ -8907,6 +8963,17 @@
       body:
       - (?i)powered\ by\ <a\ href="http://www\.edusoho\.com/"\ target="_blank">edusoho
   vendor: hagzhou-kuozhi-network-technology
+  product: edusoho
+- name: edusoho
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - powered\ by\ edusoho
+  vendor: edusoho
   product: edusoho
 - name: edusoho-open-source-web-classroom-
   protocol: http
@@ -11136,6 +11203,17 @@
       - (?i)freescout
   vendor: freescout-help-desk
   product: freescout
+- name: freescout
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - freescout
+  vendor: freescout
+  product: freescout
 - name: frick-quantum-hd
   protocol: http
   default_port:
@@ -11224,6 +11302,17 @@
       - (?i)_fj_sslvpn_login
   vendor: 00_unknown
   product: fujitsu-vpn
+- name: full_page_cache_warmer
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - mirasvit_cachewarmer
+  vendor: mirasvit
+  product: full_page_cache_warmer
 - name: fundraising_script
   protocol: http
   default_port:
@@ -11575,9 +11664,8 @@
   rule:
   - regexps:
       body:
-      - (?i)content="gitea\ \-\ git\ with\ a\ cup\ of\ tea"
-      - (?i)set\-cookie:\ i_like_gitea
-  vendor: gitea
+      - (?i)gitea
+  vendor: go-gitea
   product: gitea
 - name: gitea
   protocol: http
@@ -11587,8 +11675,9 @@
   rule:
   - regexps:
       body:
-      - (?i)gitea
-  vendor: go-gitea
+      - (?i)content="gitea\ \-\ git\ with\ a\ cup\ of\ tea"
+      - (?i)set\-cookie:\ i_like_gitea
+  vendor: gitea
   product: gitea
 - name: gitlab
   protocol: http
@@ -11840,9 +11929,8 @@
   rule:
   - regexps:
       body:
-      - (?i)<a\ class="item"\ target="_blank"\ href="https://gogs\.io/docs"\ rel="noreferrer">帮助</a>
-      - (?i)content="gogs
-  vendor: gogs
+      - (?mi)<title[^>]*>sign in - gogs.*?</title>
+  vendor: gogits
   product: gogs
 - name: gogs
   protocol: http
@@ -11852,8 +11940,9 @@
   rule:
   - regexps:
       body:
-      - (?mi)<title[^>]*>sign in - gogs.*?</title>
-  vendor: gogits
+      - (?i)<a\ class="item"\ target="_blank"\ href="https://gogs\.io/docs"\ rel="noreferrer">帮助</a>
+      - (?i)content="gogs
+  vendor: gogs
   product: gogs
 - name: golden-dragon-card-ecard-website-query-subsystem
   protocol: http
@@ -12024,29 +12113,6 @@
   rule:
   - regexps:
       body:
-      - (?i)__gradio_mode__
-  vendor: gradio
-  product: gradio
-- name: gradio
-  protocol: http
-  default_port:
-  - 80
-  - 443
-  rule:
-  - regexps:
-      body:
-      - (?i)__gradio_mode__
-      - (?mi)<title[^>]*>gradio.*?</title>
-  vendor: gradio_project
-  product: gradio
-- name: gradio
-  protocol: http
-  default_port:
-  - 80
-  - 443
-  rule:
-  - regexps:
-      body:
       - (?i)gradio\-app
       - (?mi)<title[^>]*>gradio.*?</title>
   vendor: gradio-app
@@ -12062,6 +12128,29 @@
       - (?i)__gradio_mode__
       - (?mi)<title[^>]*>gradio.*?</title>
   vendor: gradio_app
+  product: gradio
+- name: gradio
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - (?i)__gradio_mode__
+  vendor: gradio
+  product: gradio
+- name: gradio
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - (?i)__gradio_mode__
+      - (?mi)<title[^>]*>gradio.*?</title>
+  vendor: gradio_project
   product: gradio
 - name: grafana
   protocol: http
@@ -12285,6 +12374,18 @@
       - (?mi)<title[^>]*>owncloud.*?</title>
   vendor: owncloud
   product: guests
+- name: gutenkit-blocks-addon
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - /wp\-content/plugins/gutenkit\-blocks\-addon
+      - wp\-content/plugins/gutenkit\-blocks\-addon
+  vendor: wpmet
+  product: gutenkit-blocks-addon
 - name: gzcstec-exam
   protocol: http
   default_port:
@@ -12789,10 +12890,10 @@
   - 80
   - 443
   rule:
-  - favicon:
-      mmh3:
-      - '657337228'
-  vendor: linuxfoundation
+  - regexps:
+      body:
+      - (?mi)<title[^>]*>harbor.*?</title>
+  vendor: goharbor
   product: harbor
 - name: harbor
   protocol: http
@@ -12800,10 +12901,10 @@
   - 80
   - 443
   rule:
-  - regexps:
-      body:
-      - (?mi)<title[^>]*>harbor.*?</title>
-  vendor: goharbor
+  - favicon:
+      mmh3:
+      - '657337228'
+  vendor: linuxfoundation
   product: harbor
 - name: harbor
   protocol: http
@@ -13546,7 +13647,7 @@
   - regexps:
       body:
       - (?i)hospital\ management\ system
-  vendor: hospital_management_system_project
+  vendor: phpgurukul
   product: hospital_management_system
 - name: hospital_management_system
   protocol: http
@@ -13568,7 +13669,7 @@
   - regexps:
       body:
       - (?i)hospital\ management\ system
-  vendor: phpgurukul
+  vendor: hospital_management_system_project
   product: hospital_management_system
 - name: host-security-and-management-system
   protocol: http
@@ -14495,10 +14596,10 @@
   - 80
   - 443
   rule:
-  - favicon:
-      mmh3:
-      - '-1250474341'
-  vendor: vmware
+  - regexps:
+      body:
+      - (?mi)<title[^>]*>oracle access management.*?</title>
+  vendor: oracle
   product: identity_manager
 - name: identity_manager
   protocol: http
@@ -14506,10 +14607,10 @@
   - 80
   - 443
   rule:
-  - regexps:
-      body:
-      - (?mi)<title[^>]*>oracle access management.*?</title>
-  vendor: oracle
+  - favicon:
+      mmh3:
+      - '-1250474341'
+  vendor: vmware
   product: identity_manager
 - name: identity_services_engine
   protocol: http
@@ -14687,6 +14788,17 @@
       - (?i)download/imo_setup\.exe
   vendor: 00_unknown
   product: imo-云办公室
+- name: imperia-cms
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - imperia
+  vendor: imperia
+  product: imperia-cms
 - name: impresscms
   protocol: http
   default_port:
@@ -16099,11 +16211,8 @@
   rule:
   - regexps:
       body:
-      - (?i)jumpserver
-    favicon:
-      mmh3:
-      - 20334371817c7368907b5ea52aab2d9e
-  vendor: 00_unknown
+      - (?mi)<title[^>]*>jumpserver.*?</title>
+  vendor: fit2cloud
   product: jumpserver
 - name: jumpserver
   protocol: http
@@ -16113,8 +16222,11 @@
   rule:
   - regexps:
       body:
-      - (?mi)<title[^>]*>jumpserver.*?</title>
-  vendor: fit2cloud
+      - (?i)jumpserver
+    favicon:
+      mmh3:
+      - 20334371817c7368907b5ea52aab2d9e
+  vendor: 00_unknown
   product: jumpserver
 - name: jumpserver-fortres-machine
   protocol: http
@@ -16459,6 +16571,17 @@
       - (?i)server:\ keil\-eweb
   vendor: 00_unknown
   product: keil-embedded-web-server
+- name: kener
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - (?mi)<title[^>]*>kener.*?</title>
+  vendor: rajnandan1
+  product: kener
 - name: kenna-system
   protocol: http
   default_port:
@@ -16548,11 +16671,11 @@
   rule:
   - regexps:
       body:
-      - (?mi)<title[^>]*>http.title:"log in to keycloak.*?</title>
-      - (?mi)<title[^>]*>log in to keycloak.*?</title>
-      - (?mi)<title[^>]*>sign in to keycloak".*?</title>
-      - (?mi)<title[^>]*>sign in to keycloak.*?</title>
-  vendor: keycloak
+      - (?i)keycloak
+    favicon:
+      mmh3:
+      - '-1105083093'
+  vendor: redhat
   product: keycloak
 - name: keycloak
   protocol: http
@@ -16562,11 +16685,11 @@
   rule:
   - regexps:
       body:
-      - (?i)keycloak
-    favicon:
-      mmh3:
-      - '-1105083093'
-  vendor: redhat
+      - (?mi)<title[^>]*>http.title:"log in to keycloak.*?</title>
+      - (?mi)<title[^>]*>log in to keycloak.*?</title>
+      - (?mi)<title[^>]*>sign in to keycloak".*?</title>
+      - (?mi)<title[^>]*>sign in to keycloak.*?</title>
+  vendor: keycloak
   product: keycloak
 - name: keyfocus-webserver
   protocol: http
@@ -17263,6 +17386,17 @@
   - 80
   - 443
   rule:
+  - regexps:
+      body:
+      - (?i)langflow
+  vendor: langflow-ai
+  product: langflow
+- name: langflow
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
   - favicon:
       mmh3:
       - '1727196746'
@@ -17278,17 +17412,6 @@
       body:
       - (?i)langflow
   vendor: ibm
-  product: langflow
-- name: langflow
-  protocol: http
-  default_port:
-  - 80
-  - 443
-  rule:
-  - regexps:
-      body:
-      - (?i)langflow
-  vendor: langflow-ai
   product: langflow
 - name: lanmp
   protocol: http
@@ -19026,6 +19149,17 @@
       - '-399298961'
   vendor: ibm
   product: maximo_asset_management
+- name: maxkb
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - (?mi)<title[^>]*>maxkb.*?</title>
+  vendor: 1panel
+  product: maxkb
 - name: maxsite_cms
   protocol: http
   default_port:
@@ -20333,6 +20467,17 @@
       - (?i)munin\-month\.html
   vendor: 00_unknown
   product: munin
+- name: munin-httpd
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - (?mi)<title[^>]*>munin.*?</title>
+  vendor: munin
+  product: munin-httpd
 - name: music_station
   protocol: http
   default_port:
@@ -20781,9 +20926,8 @@
   rule:
   - regexps:
       body:
-      - (?i)netbox\-community
-      - (?mi)<title[^>]*>netbox.*?</title>
-  vendor: netbox-community
+      - (?i)server:\ netbox
+  vendor: 00_unknown
   product: netbox
 - name: netbox
   protocol: http
@@ -20793,8 +20937,9 @@
   rule:
   - regexps:
       body:
-      - (?i)server:\ netbox
-  vendor: 00_unknown
+      - (?i)netbox\-community
+      - (?mi)<title[^>]*>netbox.*?</title>
+  vendor: netbox-community
   product: netbox
 - name: netcom-ngfw
   protocol: http
@@ -21352,7 +21497,7 @@
   - regexps:
       body:
       - (?i)/_next/static
-  vendor: zeit
+  vendor: vercel
   product: next.js
 - name: next.js
   protocol: http
@@ -21363,7 +21508,7 @@
   - regexps:
       body:
       - (?i)/_next/static
-  vendor: vercel
+  vendor: zeit
   product: next.js
 - name: nextcloud-product
   protocol: http
@@ -21968,9 +22113,10 @@
   rule:
   - regexps:
       body:
-      - (?mi)<title[^>]*>ntopng" port:3000.*?</title>
-      - (?mi)<title[^>]*>ntopng.*?</title>
-  vendor: ntop
+      - (?i)<a\ href=http://www\.ntop\.org><img\ src="/img/logo\.png"></a>
+      - (?i)<font\ color=lightgray>generated\ by\ ntopng
+      - (?i)href="/css/ntopng\.css
+  vendor: 00_unknown
   product: ntopng
 - name: ntopng
   protocol: http
@@ -21980,10 +22126,9 @@
   rule:
   - regexps:
       body:
-      - (?i)<a\ href=http://www\.ntop\.org><img\ src="/img/logo\.png"></a>
-      - (?i)<font\ color=lightgray>generated\ by\ ntopng
-      - (?i)href="/css/ntopng\.css
-  vendor: 00_unknown
+      - (?mi)<title[^>]*>ntopng" port:3000.*?</title>
+      - (?mi)<title[^>]*>ntopng.*?</title>
+  vendor: ntop
   product: ntopng
 - name: nuance-safecom
   protocol: http
@@ -22360,8 +22505,8 @@
   rule:
   - regexps:
       body:
-      - (?i)onedev\.io
-  vendor: onedev
+      - (?mi)<title[^>]*>onedev.*?</title>
+  vendor: onedev_project
   product: onedev
 - name: onedev
   protocol: http
@@ -22371,8 +22516,8 @@
   rule:
   - regexps:
       body:
-      - (?mi)<title[^>]*>onedev.*?</title>
-  vendor: onedev_project
+      - (?i)onedev\.io
+  vendor: onedev
   product: onedev
 - name: onekeyadmin
   protocol: http
@@ -22666,6 +22811,17 @@
       - (?i)webpackjsonpopencti\-front
   vendor: 00_unknown
   product: opencti
+- name: opendcim
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - opendcim
+  vendor: opendcim
+  product: opendcim
 - name: opendocman
   protocol: http
   default_port:
@@ -22701,7 +22857,7 @@
     favicon:
       mmh3:
       - '1971268439'
-  vendor: open-emr
+  vendor: openemr
   product: openemr
 - name: openemr
   protocol: http
@@ -22715,7 +22871,7 @@
     favicon:
       mmh3:
       - '1971268439'
-  vendor: openemr
+  vendor: open-emr
   product: openemr
 - name: openfiler
   protocol: http
@@ -23636,10 +23792,8 @@
   rule:
   - regexps:
       body:
-      - (?mi)<title[^>]*>"parse-server.*?</title>
-      - (?mi)<title[^>]*>parse dashboard.*?</title>
-      - (?mi)<title[^>]*>parse server".*?</title>
-  vendor: parseplatform
+      - (?i)parseserverversion
+  vendor: parse-community
   product: parse-server
 - name: parse-server
   protocol: http
@@ -23649,8 +23803,10 @@
   rule:
   - regexps:
       body:
-      - (?i)parseserverversion
-  vendor: parse-community
+      - (?mi)<title[^>]*>"parse-server.*?</title>
+      - (?mi)<title[^>]*>parse dashboard.*?</title>
+      - (?mi)<title[^>]*>parse server".*?</title>
+  vendor: parseplatform
   product: parse-server
 - name: passwordpusher
   protocol: http
@@ -24399,8 +24555,9 @@
   rule:
   - regexps:
       body:
-      - (?i)phpldapadmin
-  vendor: phpldapadmin_project
+      - (?i)href="http://phpldapadmin\.sourceforge\.net/documentation"\ onclick
+      - (?i)src="images/default/logo\.png"\ title="phpldapadmin\ logo
+  vendor: 00_unknown
   product: phpldapadmin
 - name: phpldapadmin
   protocol: http
@@ -24410,9 +24567,8 @@
   rule:
   - regexps:
       body:
-      - (?i)href="http://phpldapadmin\.sourceforge\.net/documentation"\ onclick
-      - (?i)src="images/default/logo\.png"\ title="phpldapadmin\ logo
-  vendor: 00_unknown
+      - (?i)phpldapadmin
+  vendor: phpldapadmin_project
   product: phpldapadmin
 - name: phplist
   protocol: http
@@ -25063,6 +25219,17 @@
       - (?i)content="posterous
   vendor: 00_unknown
   product: posterous
+- name: postiz
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - postiz\ register
+  vendor: gitroomhq
+  product: postiz
 - name: poststaticfooter
   protocol: http
   default_port:
@@ -27778,6 +27945,17 @@
       - (?i)var\ sgl_js_sessid
   vendor: 00_unknown
   product: seagull-php-framework
+- name: seata
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - (?mi)<title[^>]*>seata.*?</title>
+  vendor: apache
+  product: seata
 - name: secbi-product
   protocol: http
   default_port:
@@ -28682,7 +28860,7 @@
   - favicon:
       mmh3:
       - '-1450125239'
-  vendor: b3log
+  vendor: siyuan-note
   product: siyuan
 - name: siyuan
   protocol: http
@@ -28693,7 +28871,7 @@
   - favicon:
       mmh3:
       - '-1450125239'
-  vendor: siyuan-note
+  vendor: b3log
   product: siyuan
 - name: skillsoft-skillport-lms
   protocol: http
@@ -29118,8 +29296,8 @@
   rule:
   - regexps:
       body:
-      - (?mi)<title[^>]*>sonarqube.*?</title>
-  vendor: sonarsource
+      - (?i)content="sonarqube
+  vendor: 00_unknown
   product: sonarqube
 - name: sonarqube
   protocol: http
@@ -29129,8 +29307,8 @@
   rule:
   - regexps:
       body:
-      - (?i)content="sonarqube
-  vendor: 00_unknown
+      - (?mi)<title[^>]*>sonarqube.*?</title>
+  vendor: sonarsource
   product: sonarqube
 - name: sonicwall-ssl-vpn
   protocol: http
@@ -29789,6 +29967,17 @@
       - (?mi)<title[^>]*>stirling pdf.*?</title>
   vendor: stirlingpdf
   product: stirling_pdf
+- name: stock_management_system
+  protocol: http
+  default_port:
+  - 80
+  - 443
+  rule:
+  - regexps:
+      body:
+      - (?mi)<title[^>]*>stock management system.*?</title>
+  vendor: oretnom23
+  product: stock_management_system
 - name: storage-management
   protocol: http
   default_port:
@@ -29925,7 +30114,14 @@
   - regexps:
       body:
       - (?mi)<title[^>]*>suitecrm.*?</title>
-  vendor: salesagility
+      - (?i)alt="suitecrm"
+      - (?i)src="custom/themes/default/images/company_logo\.png
+      - (?i)src="img/suitecrm\.png"\ alt="bitnami\ suitecrm\ stack"
+      - (?i)sugar\.themes\.theme_name\ \ \ \ \ \ =\ 'suiter'
+      - (?i)sugar\.themes\.theme_name\ =\ 'suitep'
+      - (?i)supercharged\ by\ suitecrm
+      - (?i)set\-cookie:\ sugar_user_theme=suitep
+  vendor: suitecrm
   product: suitecrm
 - name: suitecrm
   protocol: http
@@ -29936,14 +30132,7 @@
   - regexps:
       body:
       - (?mi)<title[^>]*>suitecrm.*?</title>
-      - (?i)alt="suitecrm"
-      - (?i)src="custom/themes/default/images/company_logo\.png
-      - (?i)src="img/suitecrm\.png"\ alt="bitnami\ suitecrm\ stack"
-      - (?i)sugar\.themes\.theme_name\ \ \ \ \ \ =\ 'suiter'
-      - (?i)sugar\.themes\.theme_name\ =\ 'suitep'
-      - (?i)supercharged\ by\ suitecrm
-      - (?i)set\-cookie:\ sugar_user_theme=suitep
-  vendor: suitecrm
+  vendor: salesagility
   product: suitecrm
 - name: sun-glassfish
   protocol: http
@@ -32504,7 +32693,7 @@
   - regexps:
       body:
       - (?mi)<title[^>]*>securepoint utm.*?</title>
-  vendor: sophos
+  vendor: securepoint
   product: unified_threat_management
 - name: unified_threat_management
   protocol: http
@@ -32515,7 +32704,7 @@
   - regexps:
       body:
       - (?mi)<title[^>]*>securepoint utm.*?</title>
-  vendor: securepoint
+  vendor: sophos
   product: unified_threat_management
 - name: uniform-server
   protocol: http
@@ -35266,7 +35455,7 @@
   - regexps:
       body:
       - (?i)/wp\-content/plugins/wp\-google\-maps
-  vendor: codecabin
+  vendor: wpgmaps
   product: wp_go_maps
 - name: wp_go_maps
   protocol: http
@@ -35288,7 +35477,7 @@
   - regexps:
       body:
       - (?i)/wp\-content/plugins/wp\-google\-maps
-  vendor: wpgmaps
+  vendor: codecabin
   product: wp_go_maps
 - name: wpb-show-core
   protocol: http
@@ -36955,7 +37144,7 @@
   - regexps:
       body:
       - (?i)zimaos
-  vendor: zimaspace
+  vendor: zimaos
   product: zimaos
 - name: zimaos
   protocol: http
@@ -36966,7 +37155,7 @@
   - regexps:
       body:
       - (?i)zimaos
-  vendor: zimaos
+  vendor: zimaspace
   product: zimaos
 - name: zimbra
   protocol: http
